@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,10 +33,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Table(name = "subcategoria")
 public class Subcategoria implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -47,8 +44,8 @@ public class Subcategoria implements Serializable {
     @Column(name = "NOMBRE")
     private String nombre;
     @NotNull
-    @Column(name = "ACTIVO")
-    private Boolean activo;
+    @Column(name = "estado")
+    private Integer estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatDemanda")
     private Collection<Trueque> truequeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatOferta")
@@ -59,17 +56,17 @@ public class Subcategoria implements Serializable {
     private Categoria categoria;
 
     public Subcategoria() {
-        this.activo = false;
+        this.estado = 0;
     }
 
     public Subcategoria(String nombre) {
+        this();
         this.nombre = nombre;
-        this.activo = false;
     }
 
-    public Subcategoria(String nombre, Boolean activo) {
-        this.nombre = nombre;
-        this.activo = activo;
+    public Subcategoria(String nombre, Integer estado) {
+        this(nombre);
+        this.estado = estado;
     }
 
     public Long getId() {
@@ -88,12 +85,12 @@ public class Subcategoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Boolean isActivo() {
-        return activo;
+    public Integer getEstado() {
+        return estado;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
     @JsonIgnore
@@ -125,20 +122,31 @@ public class Subcategoria implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.nombre);
+        hash = 29 * hash + Objects.hashCode(this.categoria);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are
-        // not set
-        if (!(object instanceof Subcategoria)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Subcategoria other = (Subcategoria) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Subcategoria other = (Subcategoria) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.categoria, other.categoria)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

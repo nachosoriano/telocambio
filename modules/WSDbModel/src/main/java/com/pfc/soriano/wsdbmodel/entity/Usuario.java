@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,10 +38,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Table(name = "usuario")
 public class Usuario implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -65,7 +62,7 @@ public class Usuario implements Serializable {
     @Column(name = "CLAVE")
     private String clave;
     @Column(name = "ESTADO")
-    private Long estado;
+    private Integer estado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PUNTUACION")
@@ -84,23 +81,20 @@ public class Usuario implements Serializable {
     private Municipio municipio;
 
     public Usuario() {
-        this.estado = 0L;
+        this.estado = 0;
         this.puntuacion = 0f;
     }
 
     public Usuario(Long id) {
+        this();
         this.id = id;
-        this.estado = 0L;
-        this.puntuacion = 0f;
     }
 
     public Usuario(Long id, String nombre, String email, String clave) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        this.id = id;
+        this(id);
         this.nombre = nombre;
         this.email = email;
         this.clave = clave;
-        this.estado = 0L;
-        this.puntuacion = 0f;
     }
 
     public Long getId() {
@@ -145,11 +139,11 @@ public class Usuario implements Serializable {
         this.clave = clave;
     }
 
-    public Long getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(Long estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 
@@ -199,20 +193,27 @@ public class Usuario implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.email);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are
-        // not set
-        if (!(object instanceof Usuario)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Usuario other = (Usuario) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

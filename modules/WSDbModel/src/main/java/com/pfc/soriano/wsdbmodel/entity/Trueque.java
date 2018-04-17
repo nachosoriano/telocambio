@@ -10,6 +10,7 @@ import com.pfc.soriano.wsdbmodel.Utils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +35,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Table(name = "trueque")
 public class Trueque implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -57,7 +57,7 @@ public class Trueque implements Serializable {
     private String descripcionDemanda;
     @Basic(optional = false)
     @Column(name = "ESTADO")
-    private Long estado;
+    private Integer estado;
     @Column(name = "FECHA_CREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -80,20 +80,17 @@ public class Trueque implements Serializable {
     private Usuario usuario;
 
     public Trueque() {
-        estado = 0L;
+        estado = 0;
         fechaCreacion = new java.sql.Date(System.currentTimeMillis());
     }
 
     public Trueque(Long id) {
+        this();
         this.id = id;
-        estado = 0L;
-        fechaCreacion = new java.sql.Date(System.currentTimeMillis());
     }
 
     public Trueque(Long id, String descripcionOferta, String descripcionDemanda) {
-        this.id = id;
-        fechaCreacion = new java.sql.Date(System.currentTimeMillis());
-        estado = 0L;
+        this(id);
         this.descripcionOferta = descripcionOferta;
         this.descripcionDemanda = descripcionDemanda;
     }
@@ -132,11 +129,11 @@ public class Trueque implements Serializable {
         this.descripcionDemanda = descripcionDemanda;
     }
 
-    public Long getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(Long estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 
@@ -193,19 +190,55 @@ public class Trueque implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.titulo);
+        hash = 53 * hash + Objects.hashCode(this.descripcionOferta);
+        hash = 53 * hash + Objects.hashCode(this.descripcionDemanda);
+        hash = 53 * hash + Objects.hashCode(this.estado);
+        hash = 53 * hash + Objects.hashCode(this.subcatDemanda);
+        hash = 53 * hash + Objects.hashCode(this.subcatOferta);
+        hash = 53 * hash + Objects.hashCode(this.usuario);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Trueque)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Trueque other = (Trueque) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Trueque other = (Trueque) obj;
+        if (!Objects.equals(this.titulo, other.titulo)) {
+            return false;
+        }
+        if (!Objects.equals(this.descripcionOferta, other.descripcionOferta)) {
+            return false;
+        }
+        if (!Objects.equals(this.descripcionDemanda, other.descripcionDemanda)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.subcatDemanda, other.subcatDemanda)) {
+            return false;
+        }
+        if (!Objects.equals(this.subcatOferta, other.subcatOferta)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuario, other.usuario)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -186,7 +186,7 @@ public class TruequeController {
     public void delete(@Param("id") Long id) {
         Optional<Trueque> trueque = truequeDAO.findById(id);
         if(trueque.isPresent()) {
-            trueque.get().setEstado((trueque.get().getEstado() + 1L) * -1L);
+            trueque.get().setEstado(0);
             truequeDAO.saveAndFlush(trueque.get());
         }
     }

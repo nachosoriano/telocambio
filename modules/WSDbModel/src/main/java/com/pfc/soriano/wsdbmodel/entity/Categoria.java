@@ -8,6 +8,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,10 +29,6 @@ import javax.validation.constraints.Size;
 @Table(name = "categoria")
 public class Categoria implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -43,23 +40,23 @@ public class Categoria implements Serializable {
     @Column(name = "NOMBRE")
     private String nombre;
     @NotNull
-    @Column(name = "ACTIVO")
-    private Boolean activo;
+    @Column(name = "ESTADO")
+    private Integer estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
     private Collection<Subcategoria> subcategoriaCollection;
 
     public Categoria() {
-        this.activo = false;
+        this.estado = 0;
     }
 
     public Categoria(String nombre) {
+        this();
         this.nombre = nombre;
-        this.activo = false;
     }
 
-    public Categoria(String nombre, Boolean activo) {
-        this.nombre = nombre;
-        this.activo = activo;
+    public Categoria(String nombre, Integer estado) {
+        this(nombre);
+        this.estado = estado;
     }
 
     public Long getId() {
@@ -78,12 +75,12 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Boolean isActivo() {
-        return activo;
+    public Integer getEstado() {
+        return estado;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
     @JsonIgnore
@@ -97,20 +94,27 @@ public class Categoria implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are
-        // not set
-        if (!(object instanceof Categoria)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Categoria other = (Categoria) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Categoria other = (Categoria) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -118,7 +122,7 @@ public class Categoria implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Id:\t").append(id).append("\n");
         sb.append("Nombre:\t").append(nombre).append("\n");
-        sb.append("Activo:\t").append(activo).append("\n");
+        sb.append("Activo:\t").append(estado).append("\n");
         return sb.toString();
     }
 

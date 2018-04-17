@@ -1,0 +1,4 @@
+/modules/WSDbModel/target/
+modules/WSDbModel/nbactions\.tmp
+
+*.log

@@ -7,6 +7,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +29,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Table(name = "valoracion")
 public class Valoracion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -54,11 +54,12 @@ public class Valoracion implements Serializable {
     }
 
     public Valoracion(Long id) {
+        this();
         this.id = id;
     }
 
     public Valoracion(Long id, int puntuacion) {
-        this.id = id;
+        this(id);
         this.puntuacion = puntuacion;
     }
 
@@ -106,19 +107,31 @@ public class Valoracion implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 43 * hash + Objects.hashCode(this.usuarioDestino);
+        hash = 43 * hash + Objects.hashCode(this.usuarioOrigen);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Valoracion)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Valoracion other = (Valoracion) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Valoracion other = (Valoracion) obj;
+        if (!Objects.equals(this.usuarioDestino, other.usuarioDestino)) {
+            return false;
+        }
+        if (!Objects.equals(this.usuarioOrigen, other.usuarioOrigen)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
