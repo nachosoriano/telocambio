@@ -20,8 +20,8 @@ public class SubcategoriaController {
 
     @RequestMapping(value = "findByCategoriaId", method = RequestMethod.POST)
     @ResponseBody
-    public Collection<Subcategoria> findByCategoriaId(@Param("categoriaId") Long categoriaId) {
-        return subcategoriaDAO.findByCategoriaIdAndActivoOrderByNombre(categoriaId, true);
+    public Collection<Subcategoria> findByCategoriaIdAndEstado(@Param("categoriaId") Long categoriaId, @Param("estado") Integer estado) {
+        return subcategoriaDAO.findByCategoriaIdAndEstadoOrderByNombre(categoriaId, estado);
     }
 
     @RequestMapping(value = "findByCategoriaIdAll", method = RequestMethod.POST)
@@ -34,7 +34,7 @@ public class SubcategoriaController {
     @ResponseBody
     public Subcategoria desactiva(@Param("id") Long id) {
         Subcategoria subcategoria = subcategoriaDAO.getOne(id);
-        subcategoria.setActivo(!subcategoria.isActivo());
+        subcategoria.setEstado(0);
         return subcategoriaDAO.saveAndFlush(subcategoria);
     }
 

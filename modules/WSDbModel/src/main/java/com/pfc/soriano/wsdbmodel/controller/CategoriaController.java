@@ -25,8 +25,8 @@ public class CategoriaController {
 
     @RequestMapping(value = "findActivas", method = RequestMethod.POST)
     @ResponseBody
-    public Collection<Categoria> findActivas() {
-        return categoriaDAO.findByActivoOrderByNombre(true);
+    public Collection<Categoria> findByEstado(String estado) {
+        return categoriaDAO.findByEstadoOrderByNombre(estado);
     }
 
     @RequestMapping(value = "findAll", method = RequestMethod.POST)
@@ -40,7 +40,7 @@ public class CategoriaController {
     @ResponseBody
     public Categoria desactiva(@Param("id") Long id) {
         Categoria categoria = categoriaDAO.getOne(id);
-        categoria.setActivo(!categoria.isActivo());
+        categoria.setEstado(0);
         return categoriaDAO.saveAndFlush(categoria);
     }
 

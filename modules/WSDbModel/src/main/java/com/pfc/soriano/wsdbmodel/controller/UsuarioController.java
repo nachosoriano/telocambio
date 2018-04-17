@@ -109,7 +109,7 @@ public class UsuarioController {
     public void delete(@Param("id") Long id) {
         Optional<Usuario> usuario = usuarioDAO.findById(id);
         if(usuario.isPresent()){
-            usuario.get().setEstado((usuario.get().getEstado() + 1L) * -1L);
+            usuario.get().setEstado(0);
             usuarioDAO.saveAndFlush(usuario.get());
         }
     }
