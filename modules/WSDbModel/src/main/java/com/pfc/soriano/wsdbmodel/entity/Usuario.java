@@ -8,6 +8,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pfc.soriano.wsdbmodel.Utils;
+import com.pfc.soriano.wsdbmodel.controller.usuario.UsuarioEstado;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -62,7 +63,7 @@ public class Usuario implements Serializable {
     @Column(name = "CLAVE")
     private String clave;
     @Column(name = "ESTADO")
-    private Integer estado;
+    private UsuarioEstado estado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PUNTUACION")
@@ -81,7 +82,7 @@ public class Usuario implements Serializable {
     private Municipio municipio;
 
     public Usuario() {
-        this.estado = 0;
+        this.estado = UsuarioEstado.ACTIVO;
         this.puntuacion = 0f;
     }
 
@@ -139,11 +140,11 @@ public class Usuario implements Serializable {
         this.clave = clave;
     }
 
-    public Integer getEstado() {
+    public UsuarioEstado getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(UsuarioEstado estado) {
         this.estado = estado;
     }
 

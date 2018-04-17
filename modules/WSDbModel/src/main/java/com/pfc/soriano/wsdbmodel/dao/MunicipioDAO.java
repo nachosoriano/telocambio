@@ -22,4 +22,6 @@ public interface MunicipioDAO extends JpaRepository<Municipio, Long> {
     Collection<Municipio> findByProvinciaOrderByNombre(@Param("provincia") Provincia provincia);
 
     Collection<Municipio> findByProvincia(@Param("provincia") Provincia provincia);
+
+    Municipio findByProvinciaAndNombre(@Param("provincia") Provincia provincia, @Param("nombre") String nombre);
 }
