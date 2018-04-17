@@ -20,7 +20,7 @@ public interface SubcategoriaDAO extends JpaRepository<Subcategoria, Long> {
 
     Collection<Subcategoria> findByCategoriaIdOrderByNombre(@Param("categoriaId") Long categoriaId);
 
-    Collection<Subcategoria> findByCategoriaIdAndActivoOrderByNombre(@Param("categoriaId") Long categoriaId, @Param("activo") Boolean activo);
+    Collection<Subcategoria> findByCategoriaIdAndEstadoOrderByNombre(@Param("categoriaId") Long categoriaId, @Param("estado") Integer estado);
 
     Subcategoria findByCategoriaIdAndNombre(@Param("categoriaId") Long categoriaId, @Param("nombre") String nombre);
 }
