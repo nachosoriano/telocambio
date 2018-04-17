@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,7 +33,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Table(name = "municipio")
 public class Municipio implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -62,11 +62,12 @@ public class Municipio implements Serializable {
     }
 
     public Municipio(Long id) {
+        this();
         this.id = id;
     }
 
     public Municipio(Long id, String nombre, int dc, int codigo) {
-        this.id = id;
+        this(id);
         this.nombre = nombre;
         this.dc = dc;
         this.codigo = codigo;
@@ -124,19 +125,31 @@ public class Municipio implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.nombre);
+        hash = 97 * hash + Objects.hashCode(this.provincia);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Municipio)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Municipio other = (Municipio) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Municipio other = (Municipio) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.provincia, other.provincia)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -8,6 +8,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +27,6 @@ import javax.validation.constraints.Size;
 @Table(name = "provincia")
 public class Provincia implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "ID")
@@ -43,11 +43,12 @@ public class Provincia implements Serializable {
     }
 
     public Provincia(Long id) {
+        this();
         this.id = id;
     }
 
     public Provincia(Long id, String nombre) {
-        this.id = id;
+        this(id);
         this.nombre = nombre;
     }
 
@@ -78,19 +79,27 @@ public class Provincia implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Provincia)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Provincia other = (Provincia) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Provincia other = (Provincia) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
