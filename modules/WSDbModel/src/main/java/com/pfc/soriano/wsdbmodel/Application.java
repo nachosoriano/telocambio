@@ -7,10 +7,7 @@ package com.pfc.soriano.wsdbmodel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import java.beans.PropertyVetoException;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,38 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
 
-    @Value("${c3p0.max_size}")
-    private int maxSize;
-
-    @Value("${c3p0.min_size}")
-    private int minSize;
-
-    @Value("${c3p0.acquire_increment}")
-    private int acquireIncrement;
-
-    @Value("${c3p0.idle_test_period}")
-    private int idleTestPeriod;
-
-    @Value("${c3p0.max_statements}")
-    private int maxStatements;
-
-    @Value("${c3p0.max_idle_time}")
-    private int maxIdleTime;
-
-    @Value("${c3p0.url}")
-    private String url;
-
-    @Value("${c3p0.username}")
-    private String username;
-
-    @Value("${c3p0.password}")
-    private String password;
-
-    @Value("${c3p0.driverClassName}")
-    private String driverClassName;
-
-    /* Here we register the Hibernate4Module into an ObjectMapper, then set this custom-configured ObjectMapper
-     * to the MessageConverter and return it to be added to the HttpMessageConverters of our application*/
+    /*
+     * Here we register the Hibernate4Module into an ObjectMapper, then set this custom-configured ObjectMapper     * to the MessageConverter and return it to be added to the HttpMessageConverters of our application*/
     public MappingJackson2HttpMessageConverter jacksonMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
@@ -129,19 +96,4 @@ public class Application extends WebMvcConfigurerAdapter {
         };
     }
 
-    @Bean
-    public ComboPooledDataSource dataSource() throws PropertyVetoException {
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setMaxPoolSize(maxSize);
-        dataSource.setMinPoolSize(minSize);
-        dataSource.setAcquireIncrement(acquireIncrement);
-        dataSource.setIdleConnectionTestPeriod(idleTestPeriod);
-        dataSource.setMaxStatements(maxStatements);
-        dataSource.setMaxIdleTime(maxIdleTime);
-        dataSource.setJdbcUrl(url);
-        dataSource.setPassword(password);
-        dataSource.setUser(username);
-        dataSource.setDriverClass(driverClassName);
-        return dataSource;
-    }
 }
