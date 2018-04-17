@@ -7,6 +7,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pfc.soriano.wsdbmodel.controller.categoria.CategoriaEstado;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
@@ -21,8 +22,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
@@ -39,13 +38,10 @@ public class Subcategoria implements Serializable {
     @Column(name = "ID")
     private Long id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
     @Column(name = "NOMBRE")
     private String nombre;
-    @NotNull
     @Column(name = "estado")
-    private Integer estado;
+    private CategoriaEstado estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatDemanda")
     private Collection<Trueque> truequeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatOferta")
@@ -56,7 +52,7 @@ public class Subcategoria implements Serializable {
     private Categoria categoria;
 
     public Subcategoria() {
-        this.estado = 0;
+        this.estado = CategoriaEstado.ACTIVO;
     }
 
     public Subcategoria(String nombre) {
@@ -64,7 +60,7 @@ public class Subcategoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Subcategoria(String nombre, Integer estado) {
+    public Subcategoria(String nombre, CategoriaEstado estado) {
         this(nombre);
         this.estado = estado;
     }
@@ -85,11 +81,11 @@ public class Subcategoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Integer getEstado() {
+    public CategoriaEstado getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(CategoriaEstado estado) {
         this.estado = estado;
     }
 

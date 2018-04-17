@@ -42,7 +42,7 @@ public class Categoria implements Serializable {
     private Collection<Subcategoria> subcategoriaCollection;
 
     public Categoria() {
-        this.estado = CategoriaEstado.BORRADO;
+        this.estado = CategoriaEstado.ACTIVO;
     }
 
     public Categoria(String nombre) {
