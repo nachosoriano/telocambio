@@ -6,6 +6,7 @@
 package com.pfc.soriano.wsdbmodel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pfc.soriano.wsdbmodel.controller.categoria.CategoriaEstado;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
@@ -18,8 +19,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -35,18 +34,15 @@ public class Categoria implements Serializable {
     @Column(name = "ID")
     private Long id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
     @Column(name = "NOMBRE")
     private String nombre;
-    @NotNull
     @Column(name = "ESTADO")
-    private Integer estado;
+    private CategoriaEstado estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
     private Collection<Subcategoria> subcategoriaCollection;
 
     public Categoria() {
-        this.estado = 0;
+        this.estado = CategoriaEstado.BORRADO;
     }
 
     public Categoria(String nombre) {
@@ -54,7 +50,7 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Categoria(String nombre, Integer estado) {
+    public Categoria(String nombre, CategoriaEstado estado) {
         this(nombre);
         this.estado = estado;
     }
@@ -75,11 +71,11 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
-    public Integer getEstado() {
+    public CategoriaEstado getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(CategoriaEstado estado) {
         this.estado = estado;
     }
 

@@ -18,7 +18,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "categorias", itemResourceRel = "categorias")
 public interface CategoriaDAO extends JpaRepository<Categoria, Long> {
 
-    Collection<Categoria> findByEstadoOrderByNombre(@Param("estado") String estado);
+    Collection<Categoria> findByEstadoOrderByNombre(@Param("estado") Integer estado);
 
     Categoria findByNombre(@Param("nombre") String nombre);
 
