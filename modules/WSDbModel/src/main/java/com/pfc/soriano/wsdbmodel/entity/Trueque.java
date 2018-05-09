@@ -7,6 +7,7 @@ package com.pfc.soriano.wsdbmodel.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pfc.soriano.wsdbmodel.Utils;
+import com.pfc.soriano.wsdbmodel.controller.trueque.TruequeEstado;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class Trueque implements Serializable {
     private String descripcionDemanda;
     @Basic(optional = false)
     @Column(name = "ESTADO")
-    private Integer estado;
+    private TruequeEstado estado;
     @Column(name = "FECHA_CREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -80,7 +81,7 @@ public class Trueque implements Serializable {
     private Usuario usuario;
 
     public Trueque() {
-        estado = 0;
+        estado = TruequeEstado.ACTIVO;
         fechaCreacion = new java.sql.Date(System.currentTimeMillis());
     }
 
@@ -129,11 +130,11 @@ public class Trueque implements Serializable {
         this.descripcionDemanda = descripcionDemanda;
     }
 
-    public Integer getEstado() {
+    public TruequeEstado getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(TruequeEstado estado) {
         this.estado = estado;
     }
 
