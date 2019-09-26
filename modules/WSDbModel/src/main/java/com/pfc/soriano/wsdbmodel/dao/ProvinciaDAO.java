@@ -16,4 +16,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "provincias", itemResourceRel = "provincias")
 public interface ProvinciaDAO extends JpaRepository<Provincia, Long> {
 
+    public Provincia findByNombre(String nombre);
 }

@@ -21,8 +21,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
@@ -39,16 +37,12 @@ public class Municipio implements Serializable {
     @Column(name = "ID")
     private Long id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
     @Column(name = "NOMBRE")
     private String nombre;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "DC")
     private int dc;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "CODIGO")
     private int codigo;
     @JoinColumn(name = "PROVINCIA", referencedColumnName = "ID")
