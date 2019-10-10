@@ -5,67 +5,20 @@
  */
 package com.pfc.soriano.wsdbmodel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "municipio")
 public class Municipio implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "NOMBRE")
     private String nombre;
-    @Basic(optional = false)
-    @Column(name = "DC")
     private int dc;
-    @Basic(optional = false)
-    @Column(name = "CODIGO")
     private int codigo;
-    @JoinColumn(name = "PROVINCIA", referencedColumnName = "ID")
-    @RestResource(exported = false)
-    @ManyToOne(optional = false)
     private Provincia provincia;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipio")
-    private Collection<Usuario> usuarioCollection;
-
-    public Municipio() {
-    }
-
-    public Municipio(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public Municipio(Long id, String nombre, int dc, int codigo) {
-        this(id);
-        this.nombre = nombre;
-        this.dc = dc;
-        this.codigo = codigo;
-    }
 
     public Long getId() {
         return id;
@@ -103,20 +56,6 @@ public class Municipio implements Serializable {
         return provincia;
     }
 
-    @JsonProperty
-    public void setProvincia(Provincia provincia) {
-        this.provincia = provincia;
-    }
-
-    @JsonIgnore
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
-    }
-
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -140,15 +79,12 @@ public class Municipio implements Serializable {
         if (!Objects.equals(this.nombre, other.nombre)) {
             return false;
         }
-        if (!Objects.equals(this.provincia, other.provincia)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.provincia, other.provincia);
     }
 
     @Override
     public String toString() {
-        return "com.pfc.soriano.wsdbmodel.entity.Municipio[ id=" + id + " ]";
+        return "Municipio{" + "id=" + id + ", nombre=" + nombre + ", dc=" + dc + ", codigo=" + codigo + ", provincia=" + provincia + '}';
     }
 
 }

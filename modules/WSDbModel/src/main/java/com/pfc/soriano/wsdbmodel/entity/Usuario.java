@@ -10,93 +10,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pfc.soriano.wsdbmodel.Utils;
 import com.pfc.soriano.wsdbmodel.controller.usuario.UsuarioEstado;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  *
  * @author NACHO
  */
-@Entity
-@Table(name = "usuario")
 public class Usuario implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "NOMBRE")
     private String nombre;
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
     // if the field contains email address consider using this annotation to
     // enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "EMAIL")
     private String email;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "CLAVE")
     private String clave;
-    @Column(name = "ESTADO")
     private UsuarioEstado estado;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PUNTUACION")
     private Float puntuacion;
-    @Transient
     private Collection<String> fotos;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<Trueque> truequeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioDestino")
     private Collection<Valoracion> valoracionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioOrigen")
     private Collection<Valoracion> valoracionCollection1;
-    @JoinColumn(name = "MUNICIPIO", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    @RestResource(exported = false)
     private Municipio municipio;
-
-    public Usuario() {
-        this.estado = UsuarioEstado.ACTIVO;
-        this.puntuacion = 0f;
-    }
-
-    public Usuario(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public Usuario(Long id, String nombre, String email, String clave) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        this(id);
-        this.nombre = nombre;
-        this.email = email;
-        this.clave = clave;
-    }
 
     public Long getId() {
         fotos = Utils.getImages("" + id, Utils.EEntityType.USUARIO);
@@ -211,21 +148,12 @@ public class Usuario implements Serializable {
             return false;
         }
         final Usuario other = (Usuario) obj;
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.email, other.email);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id:\t").append(id).append("\n");
-        sb.append("Nombre:\t").append(nombre).append("\n");
-        sb.append("Email:\t").append(email).append("\n");
-        sb.append("Provincia:\t").append(municipio.getProvincia().getNombre()).append("\n");
-        sb.append("Municipio:\t").append(municipio.getNombre()).append("\n");
-        return sb.toString();
+        return "Usuario{" + "id=" + id + ", nombre=" + nombre + ", email=" + email + ", clave=" + clave + ", estado=" + estado + ", puntuacion=" + puntuacion + ", fotos=" + fotos + ", truequeCollection=" + truequeCollection + ", valoracionCollection=" + valoracionCollection + ", valoracionCollection1=" + valoracionCollection1 + ", municipio=" + municipio + '}';
     }
 
 }

@@ -8,60 +8,18 @@ package com.pfc.soriano.wsdbmodel.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "valoracion")
 public class Valoracion implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PUNTUACION")
     private int puntuacion;
-    @Size(max = 300)
-    @Column(name = "COMENTARIO")
     private String comentario;
-    @JoinColumn(name = "USUARIO_DESTINO", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    @RestResource(exported = false)
     private Usuario usuarioDestino;
-    @JoinColumn(name = "USUARIO_ORIGEN", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    @RestResource(exported = false)
     private Usuario usuarioOrigen;
-
-    public Valoracion() {
-    }
-
-    public Valoracion(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public Valoracion(Long id, int puntuacion) {
-        this(id);
-        this.puntuacion = puntuacion;
-    }
 
     public Long getId() {
         return id;
@@ -128,15 +86,12 @@ public class Valoracion implements Serializable {
         if (!Objects.equals(this.usuarioDestino, other.usuarioDestino)) {
             return false;
         }
-        if (!Objects.equals(this.usuarioOrigen, other.usuarioOrigen)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.usuarioOrigen, other.usuarioOrigen);
     }
 
     @Override
     public String toString() {
-        return "com.pfc.soriano.wsdbmodel.entity.Valoracion[ id=" + id + " ]";
+        return "Valoracion{" + "id=" + id + ", puntuacion=" + puntuacion + ", comentario=" + comentario + ", usuarioDestino=" + usuarioDestino + ", usuarioOrigen=" + usuarioOrigen + '}';
     }
 
 }

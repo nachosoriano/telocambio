@@ -5,65 +5,20 @@
  */
 package com.pfc.soriano.wsdbmodel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pfc.soriano.wsdbmodel.controller.categoria.CategoriaEstado;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "subcategoria")
 public class Subcategoria implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "NOMBRE")
     private String nombre;
-    @Column(name = "estado")
     private CategoriaEstado estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatDemanda")
-    private Collection<Trueque> truequeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatOferta")
-    private Collection<Trueque> truequeCollection1;
-    @JoinColumn(name = "CATEGORIA", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    @RestResource(exported = false)
     private Categoria categoria;
-
-    public Subcategoria() {
-        this.estado = CategoriaEstado.ACTIVO;
-    }
-
-    public Subcategoria(String nombre) {
-        this();
-        this.nombre = nombre;
-    }
-
-    public Subcategoria(String nombre, CategoriaEstado estado) {
-        this(nombre);
-        this.estado = estado;
-    }
 
     public Long getId() {
         return id;
@@ -89,29 +44,10 @@ public class Subcategoria implements Serializable {
         this.estado = estado;
     }
 
-    @JsonIgnore
-    public Collection<Trueque> getTruequeCollection() {
-        return truequeCollection;
-    }
-
-    public void setTruequeCollection(Collection<Trueque> truequeCollection) {
-        this.truequeCollection = truequeCollection;
-    }
-
-    @JsonIgnore
-    public Collection<Trueque> getTruequeCollection1() {
-        return truequeCollection1;
-    }
-
-    public void setTruequeCollection1(Collection<Trueque> truequeCollection1) {
-        this.truequeCollection1 = truequeCollection1;
-    }
-
     public Categoria getCategoria() {
         return categoria;
     }
 
-    @JsonProperty
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
@@ -139,17 +75,12 @@ public class Subcategoria implements Serializable {
         if (!Objects.equals(this.nombre, other.nombre)) {
             return false;
         }
-        if (!Objects.equals(this.categoria, other.categoria)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.categoria, other.categoria);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(categoria.getNombre()).append(" - ").append(nombre);
-        return sb.toString();
+        return "Subcategoria{" + "id=" + id + ", nombre=" + nombre + ", estado=" + estado + ", categoria=" + categoria + '}';
     }
 
 }

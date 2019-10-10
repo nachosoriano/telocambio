@@ -5,10 +5,9 @@
  */
 package com.pfc.soriano.wsdbmodel.controller.subcategoria;
 
-import com.pfc.soriano.wsdbmodel.dao.CategoriaDAO;
 import com.pfc.soriano.wsdbmodel.entity.Categoria;
 import com.pfc.soriano.wsdbmodel.entity.Subcategoria;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -19,17 +18,16 @@ import org.springframework.stereotype.Component;
 @Component
 class RSSubcategoriaRequestConverter implements Converter<RSSubcategoriaRequest, Subcategoria> {
 
-    @Autowired
-    CategoriaDAO categoriaDao;
-
     @Override
     public Subcategoria convert(RSSubcategoriaRequest source) {
         Subcategoria result = null;
         if (source != null) {
             result = new Subcategoria();
             result.setNombre(source.getNombre());
-            Categoria categoria = categoriaDao.findByNombre(source.getCategoria());
-            result.setCategoria(categoria);
+            Optional<Categoria> categoria = Optional.empty(); //categoriaDao.findByNombre(source.getCategoria());
+            if (categoria.isPresent()) {
+                result.setCategoria(categoria.get());
+            }
         }
         return result;
     }

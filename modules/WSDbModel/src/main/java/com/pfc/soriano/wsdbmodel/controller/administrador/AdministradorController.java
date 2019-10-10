@@ -1,6 +1,5 @@
 package com.pfc.soriano.wsdbmodel.controller.administrador;
 
-import com.pfc.soriano.wsdbmodel.dao.AdministradorDAO;
 import com.pfc.soriano.wsdbmodel.entity.Administrador;
 import com.pfc.soriano.wsdbmodel.exception.DbModelException;
 import io.swagger.annotations.Api;
@@ -13,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 class AdministradorController {
 
     @Autowired
-    AdministradorDAO administradorDAO;
+    PasswordEncoder encoder;
+//    @Autowired
+//    AdministradorDAO administradorDAO;
 
     @Autowired
     Converter<RSAdministradorRequest, Administrador> rsAdministradorRequestConverter;
@@ -42,7 +42,7 @@ class AdministradorController {
     public RSAdministrador register(@Valid @RequestBody RSAdministradorRequest administradorRequest) throws DbModelException {
         try {
             Administrador administrador = rsAdministradorRequestConverter.convert(administradorRequest);
-            administrador = administradorDAO.saveAndFlush(administrador);
+            administrador = null; //administradorDAO.save(administrador);
             return administradorConverter.convert(administrador);
         } catch (Throwable ex) {
             if (ex instanceof NonTransientDataAccessException) {
@@ -58,8 +58,7 @@ class AdministradorController {
     @Transactional(propagation = Propagation.REQUIRED)
     @Valid
     public RSAdministrador login(@Param("nombre") String nombre, @Param("clave") String clave) throws DbModelException {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        Administrador administrador = administradorDAO.findByNombreAndClave(nombre, encoder.encode(clave));
+        Administrador administrador = null; //administradorDAO.findAll(PageRequest.of(0, 1)).getContent().get(0);
         if (administrador != null) {
             Authentication request = new UsernamePasswordAuthenticationToken(nombre, encoder.encode(clave));
             SecurityContextHolder.getContext().setAuthentication(request);

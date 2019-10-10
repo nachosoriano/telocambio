@@ -6,8 +6,8 @@
 package com.pfc.soriano.wsdbmodel.controller.administrador;
 
 import com.pfc.soriano.wsdbmodel.entity.Administrador;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 class RSAdministradorConverter implements Converter<RSAdministradorRequest, Administrador> {
 
-    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public Administrador convert(RSAdministradorRequest source) {

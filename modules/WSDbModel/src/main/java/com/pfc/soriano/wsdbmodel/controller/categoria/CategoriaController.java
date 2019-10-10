@@ -1,16 +1,18 @@
 package com.pfc.soriano.wsdbmodel.controller.categoria;
 
-import com.pfc.soriano.utils.ConverterUtils;
-import com.pfc.soriano.wsdbmodel.dao.CategoriaDAO;
 import com.pfc.soriano.wsdbmodel.entity.Categoria;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import javax.sql.rowset.Predicate;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,44 +27,48 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class CategoriaController {
 
+//    @Autowired
+//    CategoriaDAO categoriaDAO;
     @Autowired
-    CategoriaDAO categoriaDAO;
+    CategoriaFilterFactory categoriaFilter;
 
     @Autowired
     Converter<Categoria, RSCategoria> categoriaConverter;
     @Autowired
     Converter<RSCategoriaRequest, Categoria> rsCategoriaConverter;
 
-    @ApiOperation(value = "Busca una categoria.", nickname = "findCategoria")
-    @RequestMapping(path = "{nombre}", method = RequestMethod.GET)
-    @Valid
-    public RSCategoria find(String nombre) {
-        Categoria categoria = categoriaDAO.findByNombre(nombre);
-        return categoriaConverter.convert(categoria);
-    }
-
-    @ApiOperation(value = "Filtra categorias por estado.", nickname = "filterCategoria")
+    @ApiOperation(value = "Filtra categorias.", nickname = "filterCategoria")
     @RequestMapping(method = RequestMethod.GET)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "nombre", value = "Nombre de categoria a filtrar", required = false, dataType = "string", paramType = "query"),
+        @ApiImplicitParam(name = "estado", value = "Estado de categoria a filtrar", required = false, dataType = "string", paramType = "query", allowableValues = "ACTIVO, BORRADO")
+    })
     @Valid
-    public Collection<RSCategoria> filter(@RequestParam Optional<Integer> estado) {
-        Collection<Categoria> categorias;
-        if (estado.isPresent()) {
-            categorias = categoriaDAO.findByEstadoOrderByNombre(estado.get());
-        } else {
-            categorias = categoriaDAO.findAll(new Sort(Sort.Direction.ASC, "nombre"));
+    public Page<RSCategoria> filter(@RequestParam Optional<String> nombre, @RequestParam Optional<String> estado, Optional<Integer> pageNumber, Optional<Integer> pageSize) {
+        List<Predicate> lPredicate = new ArrayList<>();
+        if (nombre.isPresent()) {
+            lPredicate.add(categoriaFilter.getNombreFilter(nombre.get()));
         }
-        return ConverterUtils.convertAll(categorias, categoriaConverter);
+        if (estado.isPresent()) {
+            lPredicate.add(categoriaFilter.getEstadoFilter(CategoriaEstado.valueOf(estado.get())));
+        }
+        Page<Categoria> filtered = null; //categoriaDAO.findAll(PageRequest.of(pageNumber.orElse(0), pageSize.orElse(20)));
+        return filtered.map((t) -> categoriaConverter.convert(t));
     }
 
     @ApiOperation(value = "Borrado de categoria.", nickname = "deleteCategoria")
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
     @Transactional(propagation = Propagation.REQUIRED)
     @Valid
     public RSCategoria desactiva(@Param("id") Long id) {
-        Categoria categoria = categoriaDAO.getOne(id);
-        categoria.setEstado(CategoriaEstado.BORRADO);
-        categoria = categoriaDAO.saveAndFlush(categoria);
-        return categoriaConverter.convert(categoria);
+        RSCategoria result = null;
+        Optional<Categoria> categoria = null; //categoriaDAO.findById(id);
+        if (categoria.isPresent()) {
+            categoria.get().setEstado(CategoriaEstado.BORRADO);
+            Categoria updated = null; //categoriaDAO.save(categoria.get());
+            result = categoriaConverter.convert(updated);
+        }
+        return result;
     }
 
     @ApiOperation(value = "Creación de categoria.", nickname = "createCategoria")
@@ -71,7 +77,7 @@ class CategoriaController {
     @Valid
     public RSCategoria register(@Valid @RequestBody RSCategoriaRequest categoriaRequest) {
         Categoria categoria = rsCategoriaConverter.convert(categoriaRequest);
-        categoria = categoriaDAO.saveAndFlush(categoria);
+        //categoria = categoriaDAO.save(categoria);
         return categoriaConverter.convert(categoria);
     }
 

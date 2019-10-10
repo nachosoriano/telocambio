@@ -5,48 +5,17 @@
  */
 package com.pfc.soriano.wsdbmodel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "provincia")
 public class Provincia implements Serializable {
 
-    @Id
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "NOMBRE")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "provincia")
-    private Collection<Municipio> municipioCollection;
-
-    public Provincia() {
-    }
-
-    public Provincia(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public Provincia(Long id, String nombre) {
-        this(id);
-        this.nombre = nombre;
-    }
 
     public Long getId() {
         return id;
@@ -62,15 +31,6 @@ public class Provincia implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    @JsonIgnore
-    public Collection<Municipio> getMunicipioCollection() {
-        return municipioCollection;
-    }
-
-    public void setMunicipioCollection(Collection<Municipio> municipioCollection) {
-        this.municipioCollection = municipioCollection;
     }
 
     @Override
@@ -92,15 +52,12 @@ public class Provincia implements Serializable {
             return false;
         }
         final Provincia other = (Provincia) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.nombre, other.nombre);
     }
 
     @Override
     public String toString() {
-        return "com.pfc.soriano.wsdbmodel.entity.Provincia[ id=" + id + " ]";
+        return "Provincia{" + "id=" + id + ", nombre=" + nombre + '}';
     }
 
 }

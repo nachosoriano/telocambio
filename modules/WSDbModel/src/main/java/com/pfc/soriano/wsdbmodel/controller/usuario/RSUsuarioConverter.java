@@ -5,14 +5,9 @@
  */
 package com.pfc.soriano.wsdbmodel.controller.usuario;
 
-import com.pfc.soriano.wsdbmodel.dao.MunicipioDAO;
-import com.pfc.soriano.wsdbmodel.dao.ProvinciaDAO;
-import com.pfc.soriano.wsdbmodel.entity.Municipio;
-import com.pfc.soriano.wsdbmodel.entity.Provincia;
 import com.pfc.soriano.wsdbmodel.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 class RSUsuarioConverter implements Converter<RSUsuarioRequest, Usuario> {
 
-    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
-
     @Autowired
-    ProvinciaDAO provinciaDAO;
-    @Autowired
-    MunicipioDAO municipioDAO;
+    private PasswordEncoder encoder;
 
+//    @Autowired
+//    ProvinciaDAO provinciaDAO;
+//    @Autowired
+//    MunicipioDAO municipioDAO;
     @Override
     public Usuario convert(RSUsuarioRequest source) {
         Usuario result = null;
@@ -39,10 +34,10 @@ class RSUsuarioConverter implements Converter<RSUsuarioRequest, Usuario> {
             result.setEmail(source.getEmail());
             UsuarioEstado estado = UsuarioEstado.valueOf(source.getEstado());
             result.setEstado(estado);
-            Provincia provincia = provinciaDAO.findByNombre(source.getProvincia());
-            Municipio municipio = municipioDAO.findByProvinciaAndNombre(provincia, source.getMunicipio());
-            result.setMunicipio(municipio);
-            result.setNombre(source.getNombre());
+//            Provincia provincia = provinciaDAO.findByNombre(source.getProvincia());
+//            Municipio municipio = municipioDAO.findByProvinciaAndNombre(provincia, source.getMunicipio());
+//            result.setMunicipio(municipio);
+//            result.setNombre(source.getNombre());
         }
         return result;
     }

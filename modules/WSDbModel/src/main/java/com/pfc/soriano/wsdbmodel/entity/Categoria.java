@@ -5,55 +5,19 @@
  */
 package com.pfc.soriano.wsdbmodel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pfc.soriano.wsdbmodel.controller.categoria.CategoriaEstado;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "categoria")
 public class Categoria implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "NOMBRE")
     private String nombre;
-    @Column(name = "ESTADO")
     private CategoriaEstado estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
-    private Collection<Subcategoria> subcategoriaCollection;
-
-    public Categoria() {
-        this.estado = CategoriaEstado.ACTIVO;
-    }
-
-    public Categoria(String nombre) {
-        this();
-        this.nombre = nombre;
-    }
-
-    public Categoria(String nombre, CategoriaEstado estado) {
-        this(nombre);
-        this.estado = estado;
-    }
 
     public Long getId() {
         return id;
@@ -77,15 +41,6 @@ public class Categoria implements Serializable {
 
     public void setEstado(CategoriaEstado estado) {
         this.estado = estado;
-    }
-
-    @JsonIgnore
-    public Collection<Subcategoria> getSubcategoriaCollection() {
-        return subcategoriaCollection;
-    }
-
-    public void setSubcategoriaCollection(Collection<Subcategoria> subcategoriaCollection) {
-        this.subcategoriaCollection = subcategoriaCollection;
     }
 
     @Override
@@ -115,11 +70,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id:\t").append(id).append("\n");
-        sb.append("Nombre:\t").append(nombre).append("\n");
-        sb.append("Activo:\t").append(estado).append("\n");
-        return sb.toString();
+        return "Categoria{" + "id=" + id + ", nombre=" + nombre + ", estado=" + estado + '}';
     }
 
 }

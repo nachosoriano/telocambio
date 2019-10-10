@@ -5,14 +5,11 @@
  */
 package com.pfc.soriano.wsdbmodel.controller.trueque;
 
-import com.pfc.soriano.wsdbmodel.dao.CategoriaDAO;
-import com.pfc.soriano.wsdbmodel.dao.SubcategoriaDAO;
-import com.pfc.soriano.wsdbmodel.dao.UsuarioDAO;
 import com.pfc.soriano.wsdbmodel.entity.Categoria;
 import com.pfc.soriano.wsdbmodel.entity.Subcategoria;
 import com.pfc.soriano.wsdbmodel.entity.Trueque;
 import com.pfc.soriano.wsdbmodel.entity.Usuario;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +20,12 @@ import org.springframework.stereotype.Component;
 @Component
 class RSTruequeConverter implements Converter<RSTruequeRequest, Trueque> {
 
-    @Autowired
-    CategoriaDAO categoriaDAO;
-    @Autowired
-    SubcategoriaDAO subcategoriaDAO;
-    @Autowired
-    UsuarioDAO usuarioDAO;
-
+//    @Autowired
+//    CategoriaDAO categoriaDAO;
+//    @Autowired
+//    SubcategoriaDAO subcategoriaDAO;
+//    @Autowired
+//    UsuarioDAO usuarioDAO;
     @Override
     public Trueque convert(RSTruequeRequest source) {
         Trueque result = null;
@@ -39,17 +35,18 @@ class RSTruequeConverter implements Converter<RSTruequeRequest, Trueque> {
             result.setDescripcionOferta(source.getDescripcionOferta());
 
             String[] spSubcat = source.getSubcatDemanda().split("-");
-            Categoria categoria = categoriaDAO.findByNombre(spSubcat[0]);
-            Subcategoria subcategoria = subcategoriaDAO.findByCategoriaIdAndNombre(categoria.getId(), spSubcat[1]);
-            result.setSubcatDemanda(subcategoria);
+            Optional<Categoria> categoria = Optional.empty(); //categoriaDAO.findByNombre(spSubcat[0]);
+            if (categoria.isPresent()) {
+                Subcategoria subcategoria = null; //subcategoriaDAO.findByCategoriaIdAndNombre(categoria.get().getId(), spSubcat[1]);
+                result.setSubcatDemanda(subcategoria);
 
-            spSubcat = source.getSubcatOferta().split("-");
-            categoria = categoriaDAO.findByNombre(spSubcat[0]);
-            subcategoria = subcategoriaDAO.findByCategoriaIdAndNombre(categoria.getId(), spSubcat[1]);
-            result.setSubcatOferta(subcategoria);
-
+                spSubcat = source.getSubcatOferta().split("-");
+                categoria = Optional.empty(); //categoriaDAO.findByNombre(spSubcat[0]);
+                //subcategoria = subcategoriaDAO.findByCategoriaIdAndNombre(categoria.get().getId(), spSubcat[1]);
+                result.setSubcatOferta(subcategoria);
+            }
             result.setTitulo(source.getTitulo());
-            Usuario usuario = usuarioDAO.findByEmail(source.getUsuario());
+            Usuario usuario = null;// usuarioDAO.findByEmail(source.getUsuario());
             result.setUsuario(usuario);
         }
         return result;

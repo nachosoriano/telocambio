@@ -7,47 +7,16 @@ package com.pfc.soriano.wsdbmodel.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  *
- * @author NACHO
+ * @author nacho
  */
-@Entity
-@Table(name = "administrador")
 public class Administrador implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "NOMBRE")
     private String nombre;
-    @Basic(optional = false)
-    @Column(name = "CLAVE")
     private String clave;
-
-    public Administrador() {
-    }
-
-    public Administrador(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public Administrador(Long id, String nombre, String clave) {
-        this(id);
-        this.nombre = nombre;
-        this.clave = clave;
-    }
 
     public Long getId() {
         return id;
@@ -100,9 +69,7 @@ public class Administrador implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Nombre:\t").append(nombre).append("\n");
-        return sb.toString();
+        return "Administrador{" + "id=" + id + ", nombre=" + nombre + '}';
     }
 
 }

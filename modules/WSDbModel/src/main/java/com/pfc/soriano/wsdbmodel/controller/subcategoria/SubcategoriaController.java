@@ -1,15 +1,14 @@
 package com.pfc.soriano.wsdbmodel.controller.subcategoria;
 
-import com.pfc.soriano.utils.ConverterUtils;
 import com.pfc.soriano.wsdbmodel.controller.categoria.CategoriaEstado;
-import com.pfc.soriano.wsdbmodel.dao.CategoriaDAO;
-import com.pfc.soriano.wsdbmodel.dao.SubcategoriaDAO;
 import com.pfc.soriano.wsdbmodel.entity.Categoria;
 import com.pfc.soriano.wsdbmodel.entity.Subcategoria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -24,11 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class SubcategoriaController {
 
-    @Autowired
-    SubcategoriaDAO subcategoriaDAO;
-    @Autowired
-    CategoriaDAO categoriaDAO;
-
+//    @Autowired
+//    SubcategoriaDAO subcategoriaDAO;
+//    @Autowired
+//    CategoriaDAO categoriaDAO;
     @Autowired
     Converter<Subcategoria, RSSubcategoria> subcategoriaConverter;
     @Autowired
@@ -38,25 +36,33 @@ class SubcategoriaController {
     @RequestMapping(method = RequestMethod.GET)
     @Valid
     public Collection<RSSubcategoria> filter(@Param("categoria") String categoriaNombre, @Param("estado") Optional<String> estadoNombre) {
-        Collection<Subcategoria> result;
-        Categoria categoria = categoriaDAO.findByNombre(categoriaNombre);
-        if (estadoNombre.isPresent()) {
-            CategoriaEstado estado = CategoriaEstado.valueOf(estadoNombre.get());
-            result = subcategoriaDAO.findByCategoriaIdAndEstadoOrderByNombre(categoria.getId(), estado.intValue());
-        } else {
-            result = subcategoriaDAO.findByCategoriaIdOrderByNombre(categoria.getId());
+        Collection<Subcategoria> result = new ArrayList<>();
+        Optional<Categoria> categoria = Optional.empty(); //categoriaDAO.findByNombre(categoriaNombre);
+        if (categoria.isPresent()) {
+            if (estadoNombre.isPresent()) {
+                CategoriaEstado estado = CategoriaEstado.valueOf(estadoNombre.get());
+                //result.addAll(subcategoriaDAO.findByCategoriaIdAndEstadoOrderByNombre(categoria.get().getId(), estado.intValue()));
+            } else {
+                //result.addAll(result = subcategoriaDAO.findByCategoriaIdOrderByNombre(categoria.get().getId()));
+            }
         }
-        return ConverterUtils.convertAll(result, subcategoriaConverter);
+        return result.stream().map((t) -> {
+            return subcategoriaConverter.convert(t);
+        }).collect(Collectors.toList());
     }
 
     @ApiOperation(value = "Desactiva una subcategoria.", nickname = "deleteSubcategoria")
     @RequestMapping(method = RequestMethod.DELETE)
     @Valid
     public RSSubcategoria desactiva(@Param("id") Long id) {
-        Subcategoria subcategoria = subcategoriaDAO.getOne(id);
-        subcategoria.setEstado(CategoriaEstado.BORRADO);
-        subcategoria = subcategoriaDAO.saveAndFlush(subcategoria);
-        return subcategoriaConverter.convert(subcategoria);
+        RSSubcategoria result = null;
+        Optional<Subcategoria> subcategoria = null; //subcategoriaDAO.findById(id);
+        if (subcategoria.isPresent()) {
+            subcategoria.get().setEstado(CategoriaEstado.BORRADO);
+            Subcategoria updated = null; //subcategoriaDAO.save(subcategoria.get());
+            result = subcategoriaConverter.convert(updated);
+        }
+        return result;
     }
 
     @ApiOperation(value = "Crea una subcategoria.", nickname = "createSubcategoria")
@@ -64,7 +70,7 @@ class SubcategoriaController {
     @Valid
     public RSSubcategoria register(@Valid @RequestBody RSSubcategoriaRequest subcategoriaRequest) {
         Subcategoria subcategoria = rsSubcategoriaConverter.convert(subcategoriaRequest);
-        subcategoria = subcategoriaDAO.saveAndFlush(subcategoria);
+        subcategoria = null; //subcategoriaDAO.save(subcategoria);
         return subcategoriaConverter.convert(subcategoria);
     }
 
